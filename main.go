@@ -91,7 +91,7 @@ func main() {
 	}
 
 	// Initialize the channel builder
-	cb := buildChannelBuilder(numberOfBlobs).Cb
+	cb := buildChannelBuilder(numberOfBlobs)
 
 	// Connect to the local geth node
 	clientLocation := "/data/geth.ipc"
