@@ -4,6 +4,11 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
+	"math/big"
+	"os"
+	"time"
+
 	"github.com/ethereum-optimism/optimism/op-batcher/batcher"
 	"github.com/ethereum-optimism/optimism/op-batcher/compressor"
 	"github.com/ethereum-optimism/optimism/op-node/rollup"
@@ -12,10 +17,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rlp"
-	"log"
-	"math/big"
-	"os"
-	"time"
 )
 
 const ONEBLOB = 130044
@@ -27,25 +28,28 @@ var channelConfig = batcher.ChannelConfig{
 	SubSafetyMargin:    4,
 	MaxFrameSize:       ONEBLOB, // default 1 blob
 	CompressorConfig: compressor.Config{
-		TargetFrameSize:  ONEBLOB, // default 1 blob
-		TargetNumFrames:  1,
 		ApproxComprRatio: 0.4,
 		Kind:             "shadow",
 	},
 	BatchType: derive.SpanBatchType, // use SpanBatchType after Delta fork
 }
 
+func u64Ptr(v uint64) *uint64 {
+	return &v
+}
+
 var rollupConfig = rollup.Config{
-	Genesis:   rollup.Genesis{L2: eth.BlockID{Number: 0}},
-	L2ChainID: big.NewInt(8453),
+	Genesis:     rollup.Genesis{L2: eth.BlockID{Number: 0}},
+	L2ChainID:   big.NewInt(8453),
+	EcotoneTime: u64Ptr(1710374401),
 }
 
 // Note: have to override the channel definition to make it work
-func buildChannelBuilder(numberOfBlobs int) *batcher.ChannelBuilder {
+func buildChannelBuilder(numberOfBlobs int, compressionAlgo string) *batcher.ChannelBuilder {
 	channelConfig := channelConfig
 	channelConfig.MaxFrameSize = uint64(ONEBLOB * numberOfBlobs)
-	channelConfig.CompressorConfig.TargetFrameSize = uint64(ONEBLOB * numberOfBlobs)
-	cb, err := batcher.NewChannelBuilder(channelConfig, rollupConfig)
+	channelConfig.CompressorConfig.CompressionAlgo = compressionAlgo
+	cb, err := batcher.NewChannelBuilder(channelConfig, rollupConfig, 10)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,16 +77,19 @@ func main() {
 	var numberOfBlobs int
 	var startBlock int
 	var minimumTxBytes int
+	var compressionAlgo string
 
 	flag.IntVar(&numberOfBlobs, "blobs", 1, "Number of blobs to compress")
 	flag.IntVar(&startBlock, "starting-block", 11443817, "Starting block number")
 	flag.IntVar(&minimumTxBytes, "minimum-tx-bytes", 4500000, "Minimum number of tx bytes to compress")
+	flag.StringVar(&compressionAlgo, "compression-algo", "zlib", "Compression algorithm to use")
 
 	flag.Parse()
 
 	fmt.Println("Starting block: ", startBlock)
 	fmt.Println("Number of blobs: ", numberOfBlobs)
 	fmt.Println("Minimum tx bytes: ", minimumTxBytes)
+	fmt.Println("Compression algo: ", compressionAlgo)
 
 	// Open the file for writing
 	file, err := os.OpenFile("results.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -91,7 +98,7 @@ func main() {
 	}
 
 	// Initialize the channel builder
-	cb := buildChannelBuilder(numberOfBlobs)
+	cb := buildChannelBuilder(numberOfBlobs, compressionAlgo)
 
 	// Connect to the local geth node
 	clientLocation := "/data/geth.ipc"
@@ -133,7 +140,7 @@ func main() {
 	fmt.Println("total tx size: ", totalOutputtedTxSize)
 	fmt.Println("compression ratio: ", float64(totalFrameSize)/float64(totalOutputtedTxSize))
 
-	resultString := fmt.Sprintf("[%s] Starting block: %d\nNumber of blobs: %d\nMinimum tx bytes: %d\nTotal frames size: %d\nTotal tx size: %d\nCompression ratio: %f\nNumber block processed: %d\n\n", time.Now().Format(time.RFC3339), startBlock, numberOfBlobs, minimumTxBytes, totalFrameSize, totalOutputtedTxSize, float64(totalFrameSize)/float64(totalOutputtedTxSize), numBlockProcessed)
+	resultString := fmt.Sprintf("[%s] Starting block: %d\nNumber of blobs: %d\nMinimum tx bytes: %d\nTotal frames size: %d\nTotal tx size: %d\nCompression ratio: %f\nNumber block processed: %d\nCompression Algo: %s\n\n", time.Now().Format(time.RFC3339), startBlock, numberOfBlobs, minimumTxBytes, totalFrameSize, totalOutputtedTxSize, float64(totalFrameSize)/float64(totalOutputtedTxSize), numBlockProcessed, compressionAlgo)
 	file.WriteString(resultString)
 
 	defer client.Close()
