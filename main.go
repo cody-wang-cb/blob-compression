@@ -14,19 +14,20 @@ import (
 	"github.com/ethereum-optimism/optimism/op-node/rollup"
 	"github.com/ethereum-optimism/optimism/op-node/rollup/derive"
 	"github.com/ethereum-optimism/optimism/op-service/eth"
+
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rlp"
 )
 
-const ONEBLOB = 130044
+const ONEBLOB = eth.MaxBlobDataSize
 
 var channelConfig = batcher.ChannelConfig{
 	SeqWindowSize:      3600, // from base deploy script json
 	ChannelTimeout:     300,  // from base deploy script json
 	MaxChannelDuration: 600,  // 2 hrs
 	SubSafetyMargin:    4,
-	MaxFrameSize:       ONEBLOB, // default 1 blob
+	MaxFrameSize:       ONEBLOB - 1, // default 1 blob
 	CompressorConfig: compressor.Config{
 		ApproxComprRatio: 0.4,
 		Kind:             "shadow",
@@ -47,8 +48,11 @@ var rollupConfig = rollup.Config{
 // Note: have to override the channel definition to make it work
 func buildChannelBuilder(numberOfBlobs int, compressionAlgo string) *batcher.ChannelBuilder {
 	channelConfig := channelConfig
-	channelConfig.MaxFrameSize = uint64(ONEBLOB * numberOfBlobs)
+	channelConfig.MaxFrameSize = uint64((eth.MaxBlobDataSize - 1) * numberOfBlobs)
+	channelConfig.MultiFrameTxs = true
+	channelConfig.TargetNumFrames = 6
 	channelConfig.CompressorConfig.CompressionAlgo = compressionAlgo
+	channelConfig.CompressorConfig.TargetOutputSize = uint64(ONEBLOB * numberOfBlobs)
 	cb, err := batcher.NewChannelBuilder(channelConfig, rollupConfig, 10)
 	if err != nil {
 		log.Fatal(err)
@@ -79,9 +83,9 @@ func main() {
 	var minimumTxBytes int
 	var compressionAlgo string
 
-	flag.IntVar(&numberOfBlobs, "blobs", 1, "Number of blobs to compress")
+	flag.IntVar(&numberOfBlobs, "blobs", 6, "Number of blobs to compress")
 	flag.IntVar(&startBlock, "starting-block", 11443817, "Starting block number")
-	flag.IntVar(&minimumTxBytes, "minimum-tx-bytes", 4500000, "Minimum number of tx bytes to compress")
+	flag.IntVar(&minimumTxBytes, "minimum-tx-bytes", 450000000, "Minimum number of tx bytes to compress")
 	flag.StringVar(&compressionAlgo, "compression-algo", "zlib", "Compression algorithm to use")
 
 	flag.Parse()
@@ -112,12 +116,13 @@ func main() {
 	totalProcessedTxSize := 0
 	numBlockProcessed := 0
 	for i := startBlock; totalProcessedTxSize < minimumTxBytes; i++ {
+		// If we encounter an error (channel full), output the frames and print the total size of the frames
+		fmt.Println(cb.OutputBytes(), cb.InputBytes(), cb.ReadyBytes(), cb.PendingFrames())
 		block, err := client.BlockByNumber(context.Background(), big.NewInt(int64(i)))
 		if err != nil {
 			log.Fatal(err)
 		}
 		_, err = cb.AddBlock(block)
-		// If we encounter an error (channel full), output the frames and print the total size of the frames
 		if err != nil {
 			fmt.Println("Channel full, outputting frames")
 			fmt.Println("Processed tx size ", totalProcessedTxSize)
@@ -127,7 +132,7 @@ func main() {
 			cb.Reset()
 			// Update total tx size
 			totalOutputtedTxSize = totalProcessedTxSize
-			i -= 1
+			i--
 			continue
 		}
 		// Calculate the total size of all non-deposit transactions
