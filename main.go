@@ -112,12 +112,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	totalOutputtedTxSize := 0
 	totalProcessedTxSize := 0
-	numBlockProcessed := 0
-	for i := startBlock; totalProcessedTxSize < minimumTxBytes; i++ {
+	totalBlocks := 0
+	var i int;
+	for i = startBlock; totalProcessedTxSize < minimumTxBytes; i++ {
 		// If we encounter an error (channel full), output the frames and print the total size of the frames
-		fmt.Println(cb.OutputBytes(), cb.InputBytes(), cb.ReadyBytes(), cb.PendingFrames())
+		//fmt.Println(cb.OutputBytes(), cb.InputBytes(), cb.ReadyBytes(), cb.PendingFrames())
 		block, err := client.BlockByNumber(context.Background(), big.NewInt(int64(i)))
 		if err != nil {
 			log.Fatal(err)
@@ -127,11 +127,8 @@ func main() {
 			fmt.Println("Channel full, outputting frames")
 			fmt.Println("Processed tx size ", totalProcessedTxSize)
 			fmt.Println("Number of block processed ", i-startBlock)
-			numBlockProcessed = i - startBlock
 			cb.OutputFrames()
 			cb.Reset()
-			// Update total tx size
-			totalOutputtedTxSize = totalProcessedTxSize
 			i--
 			continue
 		}
@@ -139,13 +136,18 @@ func main() {
 		totalProcessedTxSize += calculateTxBytes(block)
 	}
 
+	// close the channel so that the last batches are compressed and ready to be outputted
+	cb.Close()
+	cb.OutputFrames()
+	cb.Reset()
 	// Get all the outputted frame size
 	totalFrameSize := cb.OutputBytes()
+	totalBlocks = i - startBlock
 	fmt.Println("total frames size: ", totalFrameSize)
-	fmt.Println("total tx size: ", totalOutputtedTxSize)
-	fmt.Println("compression ratio: ", float64(totalFrameSize)/float64(totalOutputtedTxSize))
+	fmt.Println("total tx size: ", totalProcessedTxSize)
+	fmt.Println("compression ratio: ", float64(totalFrameSize)/float64(totalProcessedTxSize))
 
-	resultString := fmt.Sprintf("[%s] Starting block: %d\nNumber of blobs: %d\nMinimum tx bytes: %d\nTotal frames size: %d\nTotal tx size: %d\nCompression ratio: %f\nNumber block processed: %d\nCompression Algo: %s\n\n", time.Now().Format(time.RFC3339), startBlock, numberOfBlobs, minimumTxBytes, totalFrameSize, totalOutputtedTxSize, float64(totalFrameSize)/float64(totalOutputtedTxSize), numBlockProcessed, compressionAlgo)
+	resultString := fmt.Sprintf("[%s] Starting block: %d\nNumber of blobs: %d\nMinimum tx bytes: %d\nTotal frames size: %d\nTotal tx size: %d\nCompression ratio: %f\nCompression Algo: %s\nTotal Blocks: %d\n\n", time.Now().Format(time.RFC3339), startBlock, numberOfBlobs, minimumTxBytes, totalFrameSize, totalProcessedTxSize, float64(totalFrameSize)/float64(totalProcessedTxSize), compressionAlgo, totalBlocks)
 	file.WriteString(resultString)
 
 	defer client.Close()

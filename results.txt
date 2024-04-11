@@ -1,95 +1,54 @@
-[2024-03-07T06:50:23Z] Starting block: 11440000
-Number of blobs: 1
-Minimum tx bytes: 60000000
-Total frames size: 19860980
-Total tx size: 59972825
-Compression ratio: 0.331166
-Number block processed: 12298
-
-[2024-03-07T07:27:35Z] Starting block: 11440000
-Number of blobs: 2
-Minimum tx bytes: 60000000
-Total frames size: 19420109
-Total tx size: 59304199
-Compression ratio: 0.327466
-Number block processed: 12157
-
-[2024-03-07T08:23:01Z] Starting block: 11440000
-Number of blobs: 3
-Minimum tx bytes: 60000000
-Total frames size: 19443500
-Total tx size: 59651048
-Compression ratio: 0.325954
-Number block processed: 12225
-
-[2024-03-07T09:36:49Z] Starting block: 11440000
-Number of blobs: 4
-Minimum tx bytes: 60000000
-Total frames size: 19208506
-Total tx size: 59092246
-Compression ratio: 0.325060
-Number block processed: 12119
-
-[2024-03-07T11:09:05Z] Starting block: 11440000
-Number of blobs: 5
-Minimum tx bytes: 60000000
-Total frames size: 19470230
-Total tx size: 59964518
-Compression ratio: 0.324696
-Number block processed: 12296
-
-[2024-03-07T12:59:20Z] Starting block: 11440000
+[2024-04-11T06:12:19Z] Starting block: 12820000
 Number of blobs: 6
-Minimum tx bytes: 60000000
-Total frames size: 18703627
-Total tx size: 57695385
-Compression ratio: 0.324179
-Number block processed: 11829
+Minimum tx bytes: 1125000000
+Total frames size: 326405451
+Total tx size: 1125017055
+Compression ratio: 0.290134
+Compression Algo: zlib
+Total Blocks: 27978
 
-[2024-03-07T13:12:51Z] Starting block: 11460000
-Number of blobs: 1
-Compression ratio: 0.315669
-
-[2024-03-07T13:38:52Z] Starting block: 11460000
-Number of blobs: 2
-Compression ratio: 0.312160
-
-[2024-03-07T14:17:36Z] Starting block: 11460000
-Number of blobs: 3
-Compression ratio: 0.310414
-
-[2024-03-07T15:08:44Z] Starting block: 11460000
-Number of blobs: 4
-Compression ratio: 0.309685
-
-[2024-03-07T16:12:07Z] Starting block: 11460000
-Number of blobs: 5
-Compression ratio: 0.309258
-
-[2024-03-07T17:28:49Z] Starting block: 11460000
+[2024-04-11T08:52:32Z] Starting block: 12820000
 Number of blobs: 6
-Compression ratio: 0.308679
+Minimum tx bytes: 1125000000
+Total frames size: 260305779
+Total tx size: 1125017055
+Compression ratio: 0.231379
+Compression Algo: zstd
+Total Blocks: 27978
 
-[2024-03-07T17:46:18Z] Starting block: 11480000
-Number of blobs: 1
-Compression ratio: 0.321145
-
-[2024-03-07T18:20:21Z] Starting block: 11480000
-Number of blobs: 2
-Compression ratio: 0.317812
-
-[2024-03-07T19:11:24Z] Starting block: 11480000
-Number of blobs: 3
-Compression ratio: 0.316206
-
-[2024-03-07T20:18:47Z] Starting block: 11480000
-Number of blobs: 4
-Compression ratio: 0.315601
-
-[2024-03-07T21:43:23Z] Starting block: 11480000
-Number of blobs: 5
-Compression ratio: 0.315215
-
-[2024-03-07T23:24:01Z] Starting block: 11480000
+[2024-04-11T09:36:19Z] Starting block: 12860000
 Number of blobs: 6
-Compression ratio: 0.314824
+Minimum tx bytes: 1125000000
+Total frames size: 348681501
+Total tx size: 1125016342
+Compression ratio: 0.309935
+Compression Algo: zlib
+Total Blocks: 27547
+
+[2024-04-11T12:08:16Z] Starting block: 12860000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 282373970
+Total tx size: 1125016342
+Compression ratio: 0.250995
+Compression Algo: zstd
+Total Blocks: 27547
+
+[2024-04-11T12:51:17Z] Starting block: 12900000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 317239864
+Total tx size: 1125021229
+Compression ratio: 0.281986
+Compression Algo: zlib
+Total Blocks: 25251
+
+[2024-04-11T15:25:00Z] Starting block: 12900000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 239794208
+Total tx size: 1125021229
+Compression ratio: 0.213146
+Compression Algo: zstd
+Total Blocks: 25251
+
