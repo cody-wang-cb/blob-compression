@@ -78,8 +78,8 @@ github.com/cockroachdb/redact v1.1.5 h1:u1PMllDkdFfPWaNGMyLD1+so+aq3uUItthCFqzwP
 github.com/cockroachdb/redact v1.1.5/go.mod h1:BVNblN9mBWFyMyqK1k3AAiSxhvhfK2oOZZ2lK+dpvRg=
 github.com/cockroachdb/tokenbucket v0.0.0-20230807174530-cc333fc44b06 h1:zuQyyAKVxetITBuuhv3BI9cMrmStnpT18zmgmTxunpo=
 github.com/cockroachdb/tokenbucket v0.0.0-20230807174530-cc333fc44b06/go.mod h1:7nc4anLGjupUW/PeY5qiNYsdNXj7zopG+eqsS7To5IQ=
-github.com/cody-wang-cb/optimism v0.0.0-20240410020834-93289a7d6f2d h1:K5VNGnG+Y4tDgmzBDQTeD4Dr44dLm/AYmtUVwuhTu2c=
-github.com/cody-wang-cb/optimism v0.0.0-20240410020834-93289a7d6f2d/go.mod h1:S88KEHRd/LZGIQYr/dqH68yYlHLTinZgXHI3o9vOSxM=
+github.com/cody-wang-cb/optimism v0.0.0-20240411200609-14373d93f64a h1:IVqJ8ceKTzolMRV9srVU8eyedSBWim6BFab3+NS+OHA=
+github.com/cody-wang-cb/optimism v0.0.0-20240411200609-14373d93f64a/go.mod h1:v/GSqVJYPNhS0FFWFI+bIRwSVlcnqAo1Z3l1urS70Uo=
 github.com/consensys/bavard v0.1.13 h1:oLhMLOFGTLdlda/kma4VOJazblc7IM5y5QPd2A/YjhQ=
 github.com/consensys/bavard v0.1.13/go.mod h1:9ItSMtA/dXMAiL7BG6bqW2m3NdSEObYWoH223nGHukI=
 github.com/consensys/gnark-crypto v0.12.1 h1:lHH39WuuFgVHONRl3J0LRBtuYdQTumFSDtJF7HpyG8M=
@@ -158,6 +158,8 @@ github.com/golang/snappy v0.0.5-0.20220116011046-fa5810519dcb h1:PBC98N2aIaM3XXi
 github.com/golang/snappy v0.0.5-0.20220116011046-fa5810519dcb/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
 github.com/gomarkdown/markdown v0.0.0-20230716120725-531d2d74bc12 h1:uK3X/2mt4tbSGoHvbLBHUny7CKiuwUip3MArtukol4E=
 github.com/gomarkdown/markdown v0.0.0-20230716120725-531d2d74bc12/go.mod h1:JDGcbDT52eL4fju3sZ4TeHGsQwhG9nbDV21aMyhwPoA=
+github.com/google/brotli/go/cbrotli v0.0.0-20240411182347-a813a6a1e436 h1:AeXhsYd0U2d7y0+lk44vuhKRiMB2FClBRJfZT2P8/Bo=
+github.com/google/brotli/go/cbrotli v0.0.0-20240411182347-a813a6a1e436/go.mod h1:nOPhAkwVliJdNTkj3gXpljmWhjc4wCaVqbMJcPKWP4s=
 github.com/google/go-cmp v0.3.0/go.mod h1:8QqcDgzrUqlUb/G2PQTWiueGozuR1884gddMywk6iLU=
 github.com/google/go-cmp v0.3.1/go.mod h1:8QqcDgzrUqlUb/G2PQTWiueGozuR1884gddMywk6iLU=
 github.com/google/go-cmp v0.4.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=

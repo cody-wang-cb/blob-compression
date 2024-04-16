@@ -52,3 +52,70 @@ Compression ratio: 0.213146
 Compression Algo: zstd
 Total Blocks: 25251
 
+[2024-04-13T04:12:33Z] Starting block: 12820000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 265214538
+Total tx size: 1125017055
+Compression ratio: 0.235743
+Compression Algo: brotli
+Total Blocks: 27978
+Brotli Quality: 9
+Brotli Window: 23
+
+[2024-04-13T06:44:13Z] Starting block: 12820000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 259315575
+Total tx size: 1125017055
+Compression ratio: 0.230499
+Compression Algo: brotli
+Total Blocks: 27978
+Brotli Quality: 10
+Brotli Window: 23
+
+[2024-04-13T07:03:50Z] Starting block: 12860000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 287726802
+Total tx size: 1125016342
+Compression ratio: 0.255753
+Compression Algo: brotli
+Total Blocks: 27547
+Brotli Quality: 9
+Brotli Window: 23
+
+[2024-04-13T09:31:54Z] Starting block: 12860000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 281041980
+Total tx size: 1125016342
+Compression ratio: 0.249811
+Compression Algo: brotli
+Total Blocks: 27547
+Brotli Quality: 10
+Brotli Window: 23
+
+[2024-04-13T09:50:24Z] Starting block: 12900000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 244320214
+Total tx size: 1125021229
+Compression ratio: 0.217169
+Compression Algo: brotli
+Total Blocks: 25251
+Brotli Quality: 9
+Brotli Window: 23
+
+[2024-04-13T12:13:27Z] Starting block: 12900000
+Number of blobs: 6
+Minimum tx bytes: 1125000000
+Total frames size: 238500545
+Total tx size: 1125021229
+Compression ratio: 0.211996
+Compression Algo: brotli
+Total Blocks: 25251
+Brotli Quality: 10
+Brotli Window: 23
+
+
