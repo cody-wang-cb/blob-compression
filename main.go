@@ -46,7 +46,7 @@ var rollupConfig = rollup.Config{
 }
 
 // Note: have to override the channel definition to make it work
-func buildChannelBuilder(numberOfBlobs int, compressionAlgo string, brotliQuality int, brotliWindow int) *batcher.ChannelBuilder {
+func buildChannelBuilder(numberOfBlobs int, compressionAlgo string, brotliQuality int, brotliWindow int, chain string) *batcher.ChannelBuilder {
 	channelConfig := channelConfig
 	channelConfig.MaxFrameSize = uint64((eth.MaxBlobDataSize - 1) * numberOfBlobs)
 	channelConfig.MultiFrameTxs = true
@@ -55,6 +55,9 @@ func buildChannelBuilder(numberOfBlobs int, compressionAlgo string, brotliQualit
 	channelConfig.CompressorConfig.TargetOutputSize = uint64(ONEBLOB * numberOfBlobs)
 	channelConfig.CompressorConfig.BrotliQuality = brotliQuality
 	channelConfig.CompressorConfig.BrotliWindow = brotliWindow
+	if chain == "OP" {
+		rollupConfig.L2ChainID = big.NewInt(10)
+	}
 	cb, err := batcher.NewChannelBuilder(channelConfig, rollupConfig, 10)
 	if err != nil {
 		log.Fatal(err)
@@ -86,6 +89,7 @@ func main() {
 	var compressionAlgo string
 	var brotliQuality int
 	var brotliWindow int
+	var chain string
 
 	flag.IntVar(&numberOfBlobs, "blobs", 6, "Number of blobs to compress")
 	flag.IntVar(&startBlock, "starting-block", 11443817, "Starting block number")
@@ -93,6 +97,7 @@ func main() {
 	flag.StringVar(&compressionAlgo, "compression-algo", "zlib", "Compression algorithm to use")
 	flag.IntVar(&brotliQuality, "brotli-quality", 6, "Brotli quality")
 	flag.IntVar(&brotliWindow, "brotli-window", 22, "Brotli window size")
+	flag.StringVar(&chain, "chain", "base", "chain to use")
 
 	flag.Parse()
 
@@ -102,6 +107,7 @@ func main() {
 	fmt.Println("Compression algo: ", compressionAlgo)
 	fmt.Println("Brotli quality: ", brotliQuality)
 	fmt.Println("Brotli window: ", brotliWindow)
+	fmt.Println("Chain: ", chain)
 
 	// Open the file for writing
 	file, err := os.OpenFile("results.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -110,10 +116,17 @@ func main() {
 	}
 
 	// Initialize the channel builder
-	cb := buildChannelBuilder(numberOfBlobs, compressionAlgo, brotliQuality, brotliWindow)
+	cb := buildChannelBuilder(numberOfBlobs, compressionAlgo, brotliQuality, brotliWindow, chain)
 
 	// Connect to the local geth node
-	clientLocation := "/data/geth.ipc"
+	
+	var clientLocation string
+	if chain == "base" {
+		clientLocation = "/data/geth.ipc"
+	} else {
+		clientLocation = "https://optimism-mainnet....."
+	}
+
 	client, err := ethclient.Dial(clientLocation)
 	if err != nil {
 		// Cannot connect to local node for some reason
